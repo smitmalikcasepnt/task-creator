@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task Management</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════
    DESIGN SYSTEM — COMMAND CENTER
@@ -948,6 +946,121 @@ body.light .dp-oth {background:rgba(100,116,139,.1);color:#475569;}
 
 /* ── ERROR PANEL ── */
 #errPanel{font-family:'DM Sans',sans-serif;}
+</style>
+<style id="violet-glass-reskin">
+/* ============================================================
+   VIOLET / GLASS RESKIN — appended override (presentation only)
+   Redefines design tokens + enhances surfaces. No markup or JS
+   is changed; this block just cascades last and wins.
+   ============================================================ */
+
+/* ---- DARK (default) tokens ---- */
+:root{
+  --bg:#0e0a1e; --bg2:#171029; --bg3:#0e0a1e;
+  --surface:rgba(38,25,66,0.55);
+  --glass:rgba(255,255,255,0.05); --glass2:rgba(255,255,255,0.03);
+  --inp:rgba(20,13,38,0.72); --inp2:rgba(30,20,54,0.60);
+  --b:rgba(167,139,250,0.16); --bs:rgba(167,139,250,0.30); --bfocus:rgba(167,139,250,0.65);
+  --t:#f4f1ff; --ts:#e4defb; --tm:#a99fce; --td:#6c6392;
+  --acc:#a78bfa; --acc2:#60a5fa; --acc-glow:rgba(124,58,237,0.22);
+  --th-bg:rgba(20,13,38,0.90); --th-txt:#8b7fb8;
+  --row-even:rgba(255,255,255,0.02); --row-hover:rgba(124,58,237,0.09);
+  --cell-on:rgba(124,58,237,0.18); --cell-border:rgba(167,139,250,0.50);
+  --sh:rgba(0,0,0,0.55); --sh-accent:0 4px 28px rgba(124,58,237,0.25);
+  --topbar:rgba(14,10,30,0.72);
+}
+
+/* ---- LIGHT tokens ---- */
+body.light{
+  --bg:#f5f3ff; --bg2:#ffffff; --bg3:#efeaff;
+  --surface:rgba(255,255,255,0.92);
+  --glass:rgba(255,255,255,0.85); --glass2:rgba(248,246,255,0.82);
+  --inp:#ffffff; --inp2:#f5f3ff;
+  --b:#e4ddf7; --bs:#cbbcf0; --bfocus:#7c3aed;
+  --t:#1e1732; --ts:#2a2145; --tm:#6b6291; --td:#9a8fc0;
+  --acc:#7c3aed; --acc2:#2563eb; --acc-glow:rgba(124,58,237,0.10);
+  --th-bg:#efeaff; --th-txt:#6b6291;
+  --row-even:rgba(0,0,0,0.02); --row-hover:rgba(124,58,237,0.06);
+  --cell-on:rgba(124,58,237,0.10); --cell-border:rgba(124,58,237,0.45);
+  --sh:rgba(60,30,120,0.10); --sh-accent:0 4px 20px rgba(124,58,237,0.16);
+  --topbar:rgba(255,255,255,0.85);
+}
+
+/* ---- Ambient gradient backdrop ---- */
+body{
+  background:
+    radial-gradient(1100px 620px at 12% -8%, rgba(124,58,237,0.30), transparent 60%),
+    radial-gradient(950px 680px at 112% 6%, rgba(37,99,235,0.26), transparent 55%),
+    var(--bg) !important;
+  background-attachment:fixed !important;
+}
+body.light{
+  background:
+    radial-gradient(1100px 620px at 12% -8%, rgba(124,58,237,0.12), transparent 60%),
+    radial-gradient(950px 680px at 112% 6%, rgba(37,99,235,0.10), transparent 55%),
+    var(--bg) !important;
+  background-attachment:fixed !important;
+}
+body::before{
+  background-image:
+    linear-gradient(rgba(167,139,250,0.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(167,139,250,0.045) 1px,transparent 1px) !important;
+}
+body.light::before{
+  background-image:
+    linear-gradient(rgba(124,58,237,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(124,58,237,0.05) 1px,transparent 1px) !important;
+}
+
+/* ---- Glass surfaces ---- */
+.topbar{
+  background:var(--topbar) !important;
+  backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%);
+}
+.panel{
+  background:var(--surface) !important; border:1px solid var(--b) !important;
+  backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
+  box-shadow:var(--sh-accent), 0 10px 30px -12px var(--sh) !important;
+}
+
+/* ---- Violet gradient accents (replace hardcoded sky-blue) ---- */
+.topbar-icon{
+  background:linear-gradient(135deg,#7c3aed,#2563eb) !important;
+  box-shadow:0 2px 14px rgba(124,58,237,0.45) !important;
+}
+.topbar-title{
+  background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 100%) !important;
+  -webkit-background-clip:text !important; background-clip:text !important;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#7c3aed,#2563eb) !important;
+  box-shadow:0 2px 12px rgba(124,58,237,0.30) !important;
+}
+.btn-primary:hover{ box-shadow:0 6px 20px rgba(124,58,237,0.42) !important; }
+.b-info{ background:rgba(124,58,237,.14) !important; color:#c4b5fd !important; border-color:rgba(124,58,237,.30) !important; }
+.prog-bar-fill{ background:linear-gradient(90deg,#7c3aed,#2563eb) !important; }
+.spinner{ border-color:rgba(124,58,237,.15) !important; border-top-color:#a78bfa !important; box-shadow:0 0 16px rgba(124,58,237,.25) !important; }
+.tc:hover{ background:rgba(124,58,237,.09) !important; }
+.proj-chip{ background:rgba(124,58,237,.08) !important; border-color:rgba(124,58,237,.20) !important; }
+.proj-chip:hover{ background:rgba(124,58,237,.15) !important; }
+.proj-chip.sel{ background:rgba(124,58,237,.20) !important; border-color:var(--acc) !important; }
+
+/* ---- Light-mode prominent accents (were hardcoded sky-blue) ---- */
+body.light .b-info{ color:#6d28d9 !important; background:rgba(124,58,237,.08) !important; border-color:rgba(124,58,237,.25) !important; }
+body.light .prog-bar-fill{ background:linear-gradient(90deg,#7c3aed,#2563eb) !important; }
+body.light .spinner{ border-color:rgba(124,58,237,.15) !important; border-top-color:#7c3aed !important; }
+body.light .tab-btn.active{ color:#7c3aed !important; box-shadow:0 1px 0 #7c3aed !important; }
+body.light .sub-tab.active{ color:#7c3aed !important; }
+body.light .sect-title,
+body.light .panel-title,
+body.light .modal-title,
+body.light .summary-stat strong,
+body.light .preview-stat strong,
+body.light .cell-id a,
+body.light .wi-link{ color:#7c3aed !important; }
+body.light .panel-title::before{ background:linear-gradient(180deg,#7c3aed,#2563eb) !important; }
+body.light .btn-primary{ background:linear-gradient(135deg,#7c3aed,#2563eb) !important; }
+
 </style>
 </head>
 <body>
