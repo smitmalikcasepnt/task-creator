@@ -1918,7 +1918,12 @@ function renderExcel(){
 ═══════════════════════════ */
 function toggleCell(reqId,i,event){
     const cb=document.getElementById('cb_'+reqId+'_'+i);
-    cb.checked=!cb.checked;
+    if(!cb) return;
+    // A click on the cell body only SELECTS. Once selected, the cell expands to
+    // show the worker picker + estimate; deselecting must be done via the checkbox
+    // itself, so a stray click near those fields can't silently wipe the selection.
+    if(cb.checked) return;
+    cb.checked=true;
     onCellChange(reqId,i);
 }
 function onCellChange(reqId,i){
