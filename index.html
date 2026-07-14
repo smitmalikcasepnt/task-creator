@@ -948,13 +948,7 @@ body.light .dp-oth {background:rgba(100,116,139,.1);color:#475569;}
 #errPanel{font-family:'DM Sans',sans-serif;}
 </style>
 <style id="violet-glass-reskin">
-/* ============================================================
-   VIOLET / GLASS RESKIN — appended override (presentation only)
-   Redefines design tokens + enhances surfaces. No markup or JS
-   is changed; this block just cascades last and wins.
-   ============================================================ */
-
-/* ---- DARK (default) tokens ---- */
+/* ---- task-creator tokens (violet/glass, dark + light) ---- */
 :root{
   --bg:#0e0a1e; --bg2:#171029; --bg3:#0e0a1e;
   --surface:rgba(38,25,66,0.55);
@@ -968,9 +962,8 @@ body.light .dp-oth {background:rgba(100,116,139,.1);color:#475569;}
   --cell-on:rgba(124,58,237,0.18); --cell-border:rgba(167,139,250,0.50);
   --sh:rgba(0,0,0,0.55); --sh-accent:0 4px 28px rgba(124,58,237,0.25);
   --topbar:rgba(14,10,30,0.72);
+  --r-sm:8px; --r:13px; --r-lg:18px;
 }
-
-/* ---- LIGHT tokens ---- */
 body.light{
   --bg:#f5f3ff; --bg2:#ffffff; --bg3:#efeaff;
   --surface:rgba(255,255,255,0.92);
@@ -985,92 +978,151 @@ body.light{
   --sh:rgba(60,30,120,0.10); --sh-accent:0 4px 20px rgba(124,58,237,0.16);
   --topbar:rgba(255,255,255,0.85);
 }
-
-/* ---- Ambient gradient backdrop ---- */
 body{
   background:
-    radial-gradient(1100px 620px at 12% -8%, rgba(124,58,237,0.30), transparent 60%),
-    radial-gradient(950px 680px at 112% 6%, rgba(37,99,235,0.26), transparent 55%),
+    radial-gradient(1100px 620px at 12% -8%, rgba(124,58,237,.30), transparent 60%),
+    radial-gradient(950px 680px at 112% 6%, rgba(37,99,235,.26), transparent 55%),
     var(--bg) !important;
   background-attachment:fixed !important;
 }
 body.light{
   background:
-    radial-gradient(1100px 620px at 12% -8%, rgba(124,58,237,0.12), transparent 60%),
-    radial-gradient(950px 680px at 112% 6%, rgba(37,99,235,0.10), transparent 55%),
+    radial-gradient(1100px 620px at 12% -8%, rgba(124,58,237,.12), transparent 60%),
+    radial-gradient(950px 680px at 112% 6%, rgba(37,99,235,.10), transparent 55%),
     var(--bg) !important;
   background-attachment:fixed !important;
 }
 body::before{
   background-image:
-    linear-gradient(rgba(167,139,250,0.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(167,139,250,0.045) 1px,transparent 1px) !important;
+    linear-gradient(rgba(167,139,250,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(167,139,250,.045) 1px,transparent 1px) !important;
 }
 body.light::before{
   background-image:
-    linear-gradient(rgba(124,58,237,0.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(124,58,237,0.05) 1px,transparent 1px) !important;
+    linear-gradient(rgba(124,58,237,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(124,58,237,.05) 1px,transparent 1px) !important;
 }
-
-/* ---- Glass surfaces ---- */
-.topbar{
-  background:var(--topbar) !important;
-  backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%);
-}
-.panel{
-  background:var(--surface) !important; border:1px solid var(--b) !important;
-  backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
-  box-shadow:var(--sh-accent), 0 10px 30px -12px var(--sh) !important;
-}
-
-/* ---- Violet gradient accents (replace hardcoded sky-blue) ---- */
-.topbar-icon{
-  background:linear-gradient(135deg,#7c3aed,#2563eb) !important;
-  box-shadow:0 2px 14px rgba(124,58,237,0.45) !important;
-}
-.topbar-title{
-  background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 100%) !important;
-  -webkit-background-clip:text !important; background-clip:text !important;
-}
-.btn-primary{
-  background:linear-gradient(135deg,#7c3aed,#2563eb) !important;
-  box-shadow:0 2px 12px rgba(124,58,237,0.30) !important;
-}
-.btn-primary:hover{ box-shadow:0 6px 20px rgba(124,58,237,0.42) !important; }
+.topbar{ background:var(--topbar) !important; backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%); }
+.panel{ background:var(--surface) !important; border:1px solid var(--b) !important; backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%); }
+.topbar-icon{ background:linear-gradient(135deg,#7c3aed,#2563eb) !important; box-shadow:0 2px 14px rgba(124,58,237,0.45) !important; }
+.topbar-title{ background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 100%) !important; -webkit-background-clip:text !important; background-clip:text !important; }
+.btn-primary{ background:linear-gradient(135deg,#7c3aed,#2563eb) !important; box-shadow:0 2px 12px rgba(124,58,237,0.30) !important; }
 .b-info{ background:rgba(124,58,237,.14) !important; color:#c4b5fd !important; border-color:rgba(124,58,237,.30) !important; }
 .prog-bar-fill{ background:linear-gradient(90deg,#7c3aed,#2563eb) !important; }
-.spinner{ border-color:rgba(124,58,237,.15) !important; border-top-color:#a78bfa !important; box-shadow:0 0 16px rgba(124,58,237,.25) !important; }
 .tc:hover{ background:rgba(124,58,237,.09) !important; }
 .proj-chip{ background:rgba(124,58,237,.08) !important; border-color:rgba(124,58,237,.20) !important; }
-.proj-chip:hover{ background:rgba(124,58,237,.15) !important; }
 .proj-chip.sel{ background:rgba(124,58,237,.20) !important; border-color:var(--acc) !important; }
-
-/* ---- Light-mode prominent accents (were hardcoded sky-blue) ---- */
 body.light .b-info{ color:#6d28d9 !important; background:rgba(124,58,237,.08) !important; border-color:rgba(124,58,237,.25) !important; }
 body.light .prog-bar-fill{ background:linear-gradient(90deg,#7c3aed,#2563eb) !important; }
-body.light .spinner{ border-color:rgba(124,58,237,.15) !important; border-top-color:#7c3aed !important; }
 body.light .tab-btn.active{ color:#7c3aed !important; box-shadow:0 1px 0 #7c3aed !important; }
 body.light .sub-tab.active{ color:#7c3aed !important; }
-body.light .sect-title,
-body.light .panel-title,
-body.light .modal-title,
-body.light .summary-stat strong,
-body.light .preview-stat strong,
-body.light .cell-id a,
-body.light .wi-link{ color:#7c3aed !important; }
+body.light .sect-title,body.light .panel-title,body.light .modal-title,body.light .summary-stat strong,
+body.light .preview-stat strong,body.light .cell-id a,body.light .wi-link{ color:#7c3aed !important; }
 body.light .panel-title::before{ background:linear-gradient(180deg,#7c3aed,#2563eb) !important; }
 body.light .btn-primary{ background:linear-gradient(135deg,#7c3aed,#2563eb) !important; }
-
-/* ---- Larger, more legible table column headers ---- */
-.excel-tbl thead tr:first-child th{
-  font-size:.72rem !important; letter-spacing:.03em !important; color:var(--ts) !important;
-}
-.task-tbl th,
-.preview-tbl th{
-  font-size:.74rem !important; letter-spacing:.03em !important; color:var(--ts) !important;
-}
-/* vertical (rotated) discipline column headers in the requirements grid */
+/* legible column headers */
+.excel-tbl thead tr:first-child th{ font-size:.72rem !important; letter-spacing:.03em !important; color:var(--ts) !important; }
+.task-tbl th,.preview-tbl th{ font-size:.74rem !important; letter-spacing:.03em !important; color:var(--ts) !important; }
 .th-vert .th-vert-inner{ font-size:.7rem !important; letter-spacing:.02em !important; }
+/* ============================================================
+   VIOLET / GLASS — MOTION + POLISH LAYER (shared across all tools)
+   Presentation only: CSS animations, interaction feedback, depth,
+   comfort. No markup/JS changes. Respects prefers-reduced-motion.
+   ============================================================ */
+
+/* ---- Global comfort ---- */
+html{ scroll-behavior:smooth; }
+body{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; }
+
+/* ---- Keyframes ---- */
+@keyframes vg-rise{ from{ opacity:0; transform:translateY(16px) scale(.99); } to{ opacity:1; transform:none; } }
+@keyframes vg-pop{ from{ opacity:0; transform:scale(.95); } to{ opacity:1; transform:scale(1); } }
+@keyframes vg-fade{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes vg-breathe{ 0%,100%{ box-shadow:0 0 18px rgba(124,58,237,.28); } 50%{ box-shadow:0 0 34px rgba(124,58,237,.55); } }
+@keyframes vg-bg-drift{ from{ background-position:12% -8%, 112% 6%, 0 0; } to{ background-position:17% -2%, 107% 11%, 0 0; } }
+
+/* ---- Living backdrop: very slow drift of the gradient blobs ---- */
+body{ animation:vg-bg-drift 22s ease-in-out infinite alternate; }
+
+/* ---- Entrance for content surfaces (not sticky chrome) ---- */
+.panel,.card,.login-card,.scard,.st-stat-card,.section,.wrap>section,.stat,.stat-card,.kpi,.excel-wrap,.task-tbl-wrap{
+  animation:vg-rise .55s cubic-bezier(.16,1,.3,1) both;
+}
+.scard:nth-child(2),.stat:nth-child(2),.stat-card:nth-child(2){ animation-delay:.06s; }
+.scard:nth-child(3),.stat:nth-child(3),.stat-card:nth-child(3){ animation-delay:.12s; }
+.scard:nth-child(4),.stat:nth-child(4),.stat-card:nth-child(4){ animation-delay:.18s; }
+.panel + .panel{ animation-delay:.07s; }
+
+/* modal / overlay entrance */
+.modal-bg,.modal-overlay,#previewModal,#stPopupOverlay{ animation:vg-fade .22s ease both; }
+.modal,.modal-bg>div,#stPopupOverlay>div{ animation:vg-pop .3s cubic-bezier(.16,1,.3,1) both; }
+
+/* ---- Smooth interaction transitions ---- */
+button,.btn,.btn-primary,.btn-ghost,.btn-success,.login-btn,.tab-btn,.sub-tab,.icon-btn,.recon-btn,
+.export-btn,.logout-btn,.theme-btn,.proj-chip,.modal-close,
+input,select,textarea,a,.card,.scard,.stat,.stat-card,.st-stat-card,.kpi,tr{
+  transition:transform .18s cubic-bezier(.16,1,.3,1), box-shadow .22s ease,
+             background-color .2s ease, border-color .2s ease, color .18s ease, filter .2s ease;
+}
+
+/* ---- Buttons: lift, press, focus, shine (tabs excluded from lift) ---- */
+button:not(.tab-btn):not(.sub-tab):hover,.btn:hover,.btn-primary:hover,.login-btn:hover,
+.btn-success:hover,.btn-ghost:hover,.export-btn:hover,.icon-btn:hover{ transform:translateY(-2px); }
+button:not(.tab-btn):not(.sub-tab):active,.btn:active,.btn-primary:active,.login-btn:active{ transform:translateY(0) scale(.97); }
+button:focus-visible,.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid rgba(167,139,250,.7); outline-offset:2px;
+}
+.btn-primary,.login-btn,.btn-success{ position:relative; overflow:hidden; isolation:isolate; }
+.btn-primary::after,.login-btn::after,.btn-success::after{
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.30) 50%,transparent 70%);
+  transform:translateX(-130%); transition:transform .6s ease;
+}
+.btn-primary:hover::after,.login-btn:hover::after,.btn-success:hover::after{ transform:translateX(130%); }
+
+/* ---- Cards / stat tiles: hover elevation + glow ---- */
+.card:hover,.scard:hover,.stat:hover,.stat-card:hover,.st-stat-card:hover,.kpi:hover,.proj-chip:hover{
+  transform:translateY(-3px);
+  box-shadow:0 20px 44px -18px rgba(124,58,237,.55), inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* ---- Glass sheen (subtle top highlight + violet-tinted depth) on surfaces ---- */
+.panel,.card,.login-card,.scard,.st-stat-card,.modal{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 16px 38px -22px rgba(76,29,149,.55);
+}
+
+/* ---- Table rows: hover highlight ---- */
+tbody tr{ transition:background-color .15s ease; }
+tbody tr:hover td{ background:rgba(124,58,237,.09) !important; }
+
+/* ---- Inputs: focus glow ---- */
+input:focus,select:focus,textarea:focus{
+  box-shadow:0 0 0 3px rgba(124,58,237,.22), 0 0 18px -4px rgba(124,58,237,.45) !important;
+}
+
+/* ---- Brand mark: gentle idle breathe ---- */
+.login-logo,.logo,.topbar-icon{ animation:vg-breathe 4.5s ease-in-out infinite; }
+
+/* ---- Spinners: static violet glow (rotation animation left untouched) ---- */
+.loader,.spinner{ filter:drop-shadow(0 0 8px rgba(124,58,237,.55)); }
+
+/* ---- Links: animated underline ---- */
+a:not(.btn):not(.tab-btn):not(.icon-btn):not(.sub-tab){
+  text-decoration:none;
+  background-image:linear-gradient(currentColor,currentColor);
+  background-size:0% 1.5px; background-repeat:no-repeat; background-position:0 100%;
+}
+a:not(.btn):not(.tab-btn):not(.icon-btn):not(.sub-tab):hover{ background-size:100% 1.5px; }
+
+/* ---- Sidebar / nav items nudge on hover ---- */
+nav button:hover,.nav-item:hover{ transform:translateX(2px) !important; }
+
+/* ---- Reduced-motion: disable all of the above ---- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  html{ scroll-behavior:auto; }
+  body{ animation:none !important; }
+}
 
 </style>
 </head>
