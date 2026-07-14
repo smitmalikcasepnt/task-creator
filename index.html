@@ -576,6 +576,27 @@ body.light .th-vert.d-ana  .th-vert-inner{color:#92400e;}
 }
 .mini-sel:focus{border-color:var(--bfocus);}
 .mini-sel option{background:var(--bg2);font-size:.72rem;}
+/* ── MULTI-WORKER SELECT (feature) ── */
+.ms-wrap{position:relative;width:100%;}
+.ms-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;
+  background:var(--inp);border:1px solid var(--b);color:var(--ts);border-radius:var(--r-sm);
+  padding:5px 8px;font-size:.7rem;font-family:inherit;text-align:left;cursor:pointer;
+  transition:border-color .15s,background .15s;}
+.ms-btn:hover{border-color:var(--bfocus);}
+.ms-btn .ms-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tm);}
+.ms-btn .ms-lbl.has{color:var(--acc);font-weight:600;}
+.ms-btn .ms-caret{color:var(--tm);font-size:.6rem;flex:0 0 auto;}
+.ms-panel{position:fixed;inset:auto;margin:0;padding:6px;border:1px solid var(--bs);
+  background:var(--bg2);border-radius:var(--r);box-shadow:0 20px 50px var(--sh);
+  max-height:260px;overflow-y:auto;z-index:900;min-width:180px;}
+.ms-clear{display:block;width:100%;text-align:left;background:none;border:0;color:var(--tm);
+  font-size:.7rem;padding:6px 10px;border-radius:6px;cursor:pointer;font-family:inherit;
+  border-bottom:1px solid var(--b);margin-bottom:4px;}
+.ms-clear:hover{background:var(--row-hover);color:var(--ts);}
+.ms-opt{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;
+  font-size:.72rem;color:var(--ts);cursor:pointer;}
+.ms-opt:hover{background:var(--row-hover);}
+.ms-opt input{accent-color:var(--acc);width:15px;height:15px;cursor:pointer;flex:0 0 auto;}
 
 /* ── STATUS PILLS ── */
 .sp{display:inline-block;padding:2px 7px;border-radius:var(--r-pill);font-size:.56rem;font-weight:700;white-space:nowrap;letter-spacing:.02em;}
@@ -1867,8 +1888,11 @@ function renderExcel(){
                 <input type="checkbox" class="tc-cb" id="cb_${r.id}_${i}"
                     onclick="event.stopPropagation()" onchange="onCellChange(${r.id},${i})">
                 <div class="tc-fields" id="tcf_${r.id}_${i}">
-                    <div class="mini-sel-wrap">
-                        <select class="mini-sel" id="at_${r.id}_${i}" onclick="event.stopPropagation()" title="Assigned To">${memberOpts}</select>
+                    <div class="ms-wrap">
+                        <button type="button" class="ms-btn" id="atbtn_${r.id}_${i}" onclick="msOpen(${r.id},${i},event)" title="Assigned To — pick one or more workers">
+                            <span class="ms-lbl" id="atlbl_${r.id}_${i}">— Unassigned —</span><span class="ms-caret">▾</span>
+                        </button>
+                        <div class="ms-panel" popover="auto" id="atpanel_${r.id}_${i}" onclick="event.stopPropagation()">${memberChecksHtml(r.id,i)}</div>
                     </div>
                     <input class="mini-inp" type="number" id="oe_${r.id}_${i}" placeholder="Est h" min="0" step="0.5"
                         title="Original Estimate (hours)"
@@ -1913,7 +1937,68 @@ function syncRow(reqId){
         if(!cb||!cell) return;
         cb.checked=sel.has(i);
         cell.classList.toggle('on',sel.has(i));
+        // restore selected workers into the multi-select checkboxes + label
+        const arr=(reqData[reqId]&&reqData[reqId].at&&reqData[reqId].at[i])||[];
+        const panel=document.getElementById('atpanel_'+reqId+'_'+i);
+        if(panel) panel.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=arr.includes(c.value);});
+        msUpdateLabel(reqId,i);
     });
+}
+
+/* ═══════════════════════════
+   MULTI-WORKER SELECT (feature)
+   Store selected workers as an array in reqData[reqId].at[i].
+   Uses the Popover API so the panel escapes the grid's overflow/glass.
+═══════════════════════════ */
+/* Build the checkbox-list markup for one cell's worker picker. */
+function memberChecksHtml(reqId,i){
+    const counts={};
+    memberList.forEach(m=>{counts[m.name]=(counts[m.name]||0)+1;});
+    const rows=memberList.map(m=>{
+        const dup=counts[m.name]>1 && m.unique;
+        const label=dup ? m.name+' ('+m.unique+')' : m.name;
+        return '<label class="ms-opt"><input type="checkbox" value="'+escAttr(m.value)+'" '+
+               'onchange="msToggle('+reqId+','+i+',this)"><span>'+escHtml(label)+'</span></label>';
+    }).join('');
+    return '<button type="button" class="ms-clear" onclick="msClear('+reqId+','+i+')">— Unassigned —</button>'+rows;
+}
+function msOpen(reqId,i,event){
+    if(event) event.stopPropagation();
+    const panel=document.getElementById('atpanel_'+reqId+'_'+i);
+    const btn=document.getElementById('atbtn_'+reqId+'_'+i);
+    if(!panel||!btn) return;
+    if(panel.matches(':popover-open')){ panel.hidePopover(); return; }
+    const r=btn.getBoundingClientRect();
+    // place under the button; nudge up if it would overflow the viewport bottom
+    const top=(r.bottom+270>window.innerHeight && r.top>280) ? (r.top-266) : (r.bottom+4);
+    panel.style.top=top+'px';
+    panel.style.left=Math.min(r.left,window.innerWidth-200)+'px';
+    panel.style.minWidth=Math.max(r.width,180)+'px';
+    panel.showPopover();
+}
+function msToggle(reqId,i,cbEl){
+    if(!reqData[reqId]) reqData[reqId]={sel:new Set(),at:{},oe:{},rw:{},cw:{}};
+    let arr=Array.isArray(reqData[reqId].at[i])?reqData[reqId].at[i]:[];
+    const v=cbEl.value;
+    if(cbEl.checked){ if(!arr.includes(v)) arr.push(v); }
+    else { arr=arr.filter(x=>x!==v); }
+    reqData[reqId].at[i]=arr;
+    msUpdateLabel(reqId,i);
+}
+function msClear(reqId,i){
+    if(!reqData[reqId]) reqData[reqId]={sel:new Set(),at:{},oe:{},rw:{},cw:{}};
+    reqData[reqId].at[i]=[];
+    const panel=document.getElementById('atpanel_'+reqId+'_'+i);
+    if(panel){ panel.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false); if(panel.hidePopover) panel.hidePopover(); }
+    msUpdateLabel(reqId,i);
+}
+function msUpdateLabel(reqId,i){
+    const lbl=document.getElementById('atlbl_'+reqId+'_'+i);
+    if(!lbl) return;
+    const arr=(reqData[reqId]&&reqData[reqId].at&&reqData[reqId].at[i])||[];
+    if(!arr.length){ lbl.textContent='— Unassigned —'; lbl.classList.remove('has'); }
+    else if(arr.length===1){ lbl.textContent=assignedDisplayName(arr[0]); lbl.classList.add('has'); }
+    else { lbl.textContent=arr.length+' workers'; lbl.classList.add('has'); }
 }
 function globalAll(state){
     filteredReqs.forEach(r=>{
@@ -1933,7 +2018,11 @@ function globalTT(disc){
 }
 function updateSummary(){
     const reqs=filteredReqs.filter(r=>(reqData[r.id]||{sel:new Set()}).sel.size>0);
-    const tasks=filteredReqs.reduce((s,r)=>s+((reqData[r.id]||{sel:new Set()}).sel.size),0);
+    const tasks=filteredReqs.reduce((s,r)=>{
+        const d=reqData[r.id]||{sel:new Set(),at:{}};
+        let n=0; d.sel.forEach(i=>{ const w=Array.isArray(d.at&&d.at[i])?d.at[i].length:0; n+=Math.max(1,w); });
+        return s+n;
+    },0);
     document.getElementById('smReqs').textContent=reqs.length;
     document.getElementById('smTasks').textContent=tasks;
 }
@@ -2084,14 +2173,19 @@ function generateAllTasks(){
         const selIdx=[...(reqData[req.id]||{sel:new Set()}).sel];
         for(const i of selIdx){
             const tt=TASK_TYPES[i];
-            const assignedTo=(document.getElementById('at_'+req.id+'_'+i)||{}).value||'';
             const origEst=parseFloat((document.getElementById('oe_'+req.id+'_'+i)||{}).value)||0;
-            _pendingTasks.push({
-                reqId:req.id, reqTitle:req.title, reqIter:req.iter, reqArea:req.area,
-                ttIdx:i, ttName:tt.name, disc:tt.disc, regression:!!tt.regression, execType:ttExecType(tt),
-                assignedTo, origEst,
-                remWork:origEst,   // Remaining = Original Estimate
-            });
+            // Multi-worker: one task per selected worker (each gets the full estimate).
+            // No worker selected → a single Unassigned task (original behavior).
+            let workers=(reqData[req.id]&&Array.isArray(reqData[req.id].at[i]))?reqData[req.id].at[i]:[];
+            const assignees=workers.length?workers:[''];
+            for(const assignedTo of assignees){
+                _pendingTasks.push({
+                    reqId:req.id, reqTitle:req.title, reqIter:req.iter, reqArea:req.area,
+                    ttIdx:i, ttName:tt.name, disc:tt.disc, regression:!!tt.regression, execType:ttExecType(tt),
+                    assignedTo, origEst,
+                    remWork:origEst,   // Remaining = Original Estimate
+                });
+            }
         }
     }
 
