@@ -1061,6 +1061,17 @@ body.light .wi-link{ color:#7c3aed !important; }
 body.light .panel-title::before{ background:linear-gradient(180deg,#7c3aed,#2563eb) !important; }
 body.light .btn-primary{ background:linear-gradient(135deg,#7c3aed,#2563eb) !important; }
 
+/* ---- Larger, more legible table column headers ---- */
+.excel-tbl thead tr:first-child th{
+  font-size:.72rem !important; letter-spacing:.03em !important; color:var(--ts) !important;
+}
+.task-tbl th,
+.preview-tbl th{
+  font-size:.74rem !important; letter-spacing:.03em !important; color:var(--ts) !important;
+}
+/* vertical (rotated) discipline column headers in the requirements grid */
+.th-vert .th-vert-inner{ font-size:.7rem !important; letter-spacing:.02em !important; }
+
 </style>
 </head>
 <body>
