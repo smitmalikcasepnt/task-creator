@@ -1749,7 +1749,7 @@ async function connectProject(){
         if(!ir.ok) throw new Error('Failed to load iterations');
         allIterations=flattenNodes(await ir.json());
         allAreas=flattenNodes(await ar.json());
-        allAreas.sort((a,b)=>a.name.localeCompare(b.name));
+        allAreas.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));
 
         // Members are loaded when user selects an area path (onAreaChange)
         memberList=[];
@@ -2417,7 +2417,7 @@ function populateAreaMultiSelect(){
     const areaSet=new Set(allTasks.map(t=>t.area).filter(Boolean));
     const cont=document.getElementById('tlAreaOptions');
     if(!cont) return;
-    cont.innerHTML=[...areaSet].sort().map(v=>`
+    cont.innerHTML=[...areaSet].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'})).map(v=>`
         <label style="display:flex;align-items:center;gap:6px;padding:4px 10px;cursor:pointer;font-size:.7rem;color:var(--ts);">
             <input type="checkbox" class="tl-area-cb" value="${escAttr(v)}" checked onchange="onAreaCbChange()"
                 style="accent-color:var(--acc);width:12px;height:12px;">
