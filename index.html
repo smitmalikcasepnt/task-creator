@@ -1749,7 +1749,7 @@ async function connectProject(){
         if(!ir.ok) throw new Error('Failed to load iterations');
         allIterations=flattenNodes(await ir.json());
         allAreas=flattenNodes(await ar.json());
-        allAreas.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));
+        allAreas.sort((a,b)=>areaLabel(a).localeCompare(areaLabel(b),undefined,{numeric:true,sensitivity:'base'}));
 
         // Members are loaded when user selects an area path (onAreaChange)
         memberList=[];
@@ -1757,12 +1757,12 @@ async function connectProject(){
         // Area dropdown — single required selection, no "All Areas" option
         const as=document.getElementById('areaSel');
         as.innerHTML='<option value="">— select an area —</option>'+
-            allAreas.map(a=>`<option value="${escAttr(a.path)}">${escHtml(a.name)}</option>`).join('');
+            allAreas.map(a=>`<option value="${escAttr(a.path)}">${escHtml(areaLabel(a))}</option>`).join('');
 
         // Mirror to Tab 2's own area select
         const tl2a=document.getElementById('tl2AreaSel');
         if(tl2a) tl2a.innerHTML='<option value="">All Areas</option>'+
-            allAreas.map(a=>`<option value="${escAttr(a.path)}">${escHtml(a.name)}</option>`).join('');
+            allAreas.map(a=>`<option value="${escAttr(a.path)}">${escHtml(areaLabel(a))}</option>`).join('');
 
         // Iteration dropdown (grouped, latest quarter first)
         buildIterSelect();
@@ -3175,6 +3175,15 @@ function flattenNodes(node,res=[],d=0){
     if(d>0){const raw=node.path||node.name;res.push({name:node.name,path:raw.replace(/^\\/,''),id:node.id||null});}
     if(node.children) node.children.forEach(c=>flattenNodes(c,res,d+1));
     return res;
+}
+/* Team-style label for an area: project-relative path with backslashes as
+   spaces, so a sub-area "Project\ASTRA\Central" reads "ASTRA Central" —
+   matching how TFS lists teams/areas. Flat areas are unchanged. */
+function areaLabel(a){
+    let p=(a&&(a.path||a.name))||'';
+    if(currentProject && p.toLowerCase().indexOf(currentProject.toLowerCase()+'\\')===0) p=p.slice(currentProject.length+1);
+    p=p.replace(/\\/g,' ').replace(/\s+/g,' ').trim();
+    return p || (a&&a.name) || '';
 }
 function stateHtml(s){
     const m={Active:'sp-active',Resolved:'sp-resolved',Closed:'sp-closed',Proposed:'sp-proposed'};
