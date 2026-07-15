@@ -3181,7 +3181,12 @@ function flattenNodes(node,res=[],d=0){
    matching how TFS lists teams/areas. Flat areas are unchanged. */
 function areaLabel(a){
     let p=(a&&(a.path||a.name))||'';
-    if(currentProject && p.toLowerCase().indexOf(currentProject.toLowerCase()+'\\')===0) p=p.slice(currentProject.length+1);
+    // TFS area paths are "<internalProject>\Area\<hierarchy>" (the internal
+    // project name persists after a rename, e.g. CasepointARA -> "CPTOS").
+    // Strip up to & incl. "\Area\" so only the real area hierarchy remains.
+    const m='\\Area\\', i=p.toLowerCase().indexOf(m.toLowerCase());
+    if(i>=0){ p=p.slice(i+m.length); }
+    else { const s=p.split('\\'); if(s.length>1) p=s.slice(1).join('\\'); }
     p=p.replace(/\\/g,' ').replace(/\s+/g,' ').trim();
     return p || (a&&a.name) || '';
 }
