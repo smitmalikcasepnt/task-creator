@@ -1213,11 +1213,10 @@ body.light select option:checked{ background:#7c3aed; color:#fff; }
 body.tc-connect{
   animation:none !important;
   background:
-    radial-gradient(48% 42% at 18% 12%, rgba(124,58,237,.50), transparent 62%),
-    radial-gradient(46% 40% at 84% 16%, rgba(37,99,235,.45), transparent 62%),
-    radial-gradient(60% 55% at 50% 108%, rgba(167,139,250,.34), transparent 60%),
-    radial-gradient(40% 40% at 92% 88%, rgba(56,189,248,.18), transparent 60%),
-    #0a0716 !important;
+    radial-gradient(52% 46% at 16% 10%, rgba(124,58,237,.26), transparent 66%),
+    radial-gradient(50% 42% at 86% 14%, rgba(37,99,235,.22), transparent 66%),
+    radial-gradient(62% 55% at 50% 110%, rgba(167,139,250,.15), transparent 64%),
+    #0b0817 !important;
   background-attachment:fixed !important;
 }
 body.tc-connect .main{
@@ -1227,9 +1226,9 @@ body.tc-connect .main{
 }
 /* subtle concentric-ring artwork behind the card (inline SVG, self-contained) */
 body.tc-connect .main::before{
-  content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.75;
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5;
   background-repeat:no-repeat; background-position:center; background-size:cover;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700' viewBox='0 0 1200 700'%3E%3Cg fill='none' stroke='%23a78bfa' stroke-opacity='0.12' stroke-width='1.4'%3E%3Ccircle cx='250' cy='160' r='90'/%3E%3Ccircle cx='250' cy='160' r='155'/%3E%3Ccircle cx='250' cy='160' r='230'/%3E%3Ccircle cx='980' cy='560' r='110'/%3E%3Ccircle cx='980' cy='560' r='185'/%3E%3C/g%3E%3Cg fill='%23c4b5fd' fill-opacity='0.10'%3E%3Ccircle cx='250' cy='160' r='4'/%3E%3Ccircle cx='980' cy='560' r='4'/%3E%3C/g%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700' viewBox='0 0 1200 700'%3E%3Cg fill='none' stroke='%23a78bfa' stroke-opacity='0.07' stroke-width='1.2'%3E%3Ccircle cx='250' cy='160' r='90'/%3E%3Ccircle cx='250' cy='160' r='155'/%3E%3Ccircle cx='250' cy='160' r='230'/%3E%3Ccircle cx='980' cy='560' r='110'/%3E%3Ccircle cx='980' cy='560' r='185'/%3E%3C/g%3E%3Cg fill='%23c4b5fd' fill-opacity='0.06'%3E%3Ccircle cx='250' cy='160' r='4'/%3E%3Ccircle cx='980' cy='560' r='4'/%3E%3C/g%3E%3C/svg%3E");
 }
 body.tc-connect #connPanel{
   position:relative; z-index:1;
